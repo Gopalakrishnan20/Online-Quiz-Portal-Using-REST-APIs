@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.admin.model.AdminDetails;
 import com.admin.model.LiveQuiz;
 import com.admin.model.QnA;
 import com.admin.model.Quizes;
 import com.admin.model.Stats;
+import com.admin.repository.AdminRepo;
 import com.admin.repository.QuestionRepository;
 import com.admin.repository.QuizesRepository;
 
@@ -22,6 +24,9 @@ public class AdminServices {
 
 	@Autowired
 	QuestionRepository questionRepository;
+	
+	@Autowired
+	AdminRepo adminRepo;
 	
 	@Autowired
 	RestTemplate restTemplate;
@@ -107,6 +112,17 @@ public class AdminServices {
 		stat.setQuestionsCount(questionRepository.findAll().size());
 		stat.setUserCount(restTemplate.getForObject("http://localhost:8082/user/userCount", Integer.class));
 		return stat;
+	}
+	
+	public boolean checkCred(String uname,String pass) {
+		
+		AdminDetails cred=adminRepo.findByaUname(uname);
+		if(cred.getaUname().matches(uname)&&cred.getaPass().matches(pass)) {
+			return true;			
+		}
+		else
+			return false;
+		
 	}
 
 }

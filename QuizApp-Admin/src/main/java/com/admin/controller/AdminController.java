@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.admin.model.LiveQuiz;
@@ -22,17 +23,42 @@ import com.admin.services.AdminServices;
 @RequestMapping("/admin")
 public class AdminController {
 	
+	public static String accessToken=null;
+	
 	@Autowired
 	AdminServices adminServices;
 	
-	@PostMapping("/addQuestions")
-	public void addQuestions(@RequestBody QnA q) {
+	@PostMapping("/signin")
+	public String signin(@RequestParam String uname,@RequestParam String pass) {
+		if(adminServices.checkCred(uname,pass))
+		{
+			accessToken="Admin@AccessToken456";
+			return "Access Token Generated : "+accessToken;
+		}
+		else
+			return "Invalid Credentials";
+	}
+	
+	@PostMapping("{accessTokenR}/addQuestions")
+	public String addQuestions(@PathVariable String accessTokenR, @RequestBody QnA q) {
+		if(accessTokenR.matches(accessToken)) {
 		adminServices.addQuestions(q);
+		return "Questions Added Successfully";
+		}
+		else {
+			return "Enter Proper Access Token";
+		}
+		
 	}
 		
-	@PostMapping("/createQuiz")
-	public void createQuiz(@RequestBody Quizes qz) {
+	@PostMapping("{accessTokenR}/createQuiz")
+	public String createQuiz(@PathVariable String accessTokenR, @RequestBody Quizes qz) {
+		if(accessTokenR.matches(accessToken)) {
 		adminServices.addQuiz(qz);
+		return "Quiz Added successfully";}
+		else {
+			return "Enter Proper Access Token";
+		}
 		//adminServices.updateQuestions(qz.getQzId(), qarr.getQnId());				
 	}
 	@PostMapping("/setQuizId/{id}")
