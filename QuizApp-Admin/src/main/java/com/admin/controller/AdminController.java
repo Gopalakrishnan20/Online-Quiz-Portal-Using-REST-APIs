@@ -28,7 +28,7 @@ public class AdminController {
 	public void addQuestions(@RequestBody QnA q) {
 		adminServices.addQuestions(q);
 	}
-	
+		
 	@PostMapping("/createQuiz")
 	public void createQuiz(@RequestBody Quizes qz) {
 		adminServices.addQuiz(qz);
