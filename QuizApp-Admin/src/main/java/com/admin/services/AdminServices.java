@@ -93,5 +93,9 @@ public class AdminServices {
 		return quizanswers;
 		
 	}
+	public List<Quizes> showQuizes() {
+		List<Quizes> q=quizesRepository.findAllByPublished(true);
+		return q;
+	}
 
 }

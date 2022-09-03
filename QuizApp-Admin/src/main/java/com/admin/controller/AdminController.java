@@ -48,6 +48,10 @@ public class AdminController {
 	public String[] fetchAnswers(@PathVariable long qzId) {
 		return adminServices.getAnswers(qzId);
 	}
+	@GetMapping("/getAvailableQuiz")
+	public List<Quizes> showQuizes() {
+		return adminServices.showQuizes();		
+	}
 	
 
 }
