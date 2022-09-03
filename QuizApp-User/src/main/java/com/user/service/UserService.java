@@ -57,7 +57,7 @@ public class UserService {
 		Map<String,Long> params=new HashMap<String,Long>();
 		params.put("qzId", (long) id);
 		
-		LiveQuiz liveQuiz=restTemplate.getForObject("http://localhost:8080/admin/getQuestions/{qzId}", LiveQuiz.class, params);
+		LiveQuiz liveQuiz=restTemplate.getForObject("http://localhost:8081/admin/getQuestions/{qzId}", LiveQuiz.class, params);
 		liveQuiz.setUserId(getUserDetails().getUserId());
 		liveQuiz.setUserName(getUserDetails().getUserName());
 		return liveQuiz;
@@ -70,7 +70,7 @@ public class UserService {
 		params.put("qzId", qzId);
 		
 		LiveQuiz liveQuiz=getQuiz(qzId);
-		String[] answers=restTemplate.getForObject("http://localhost:8080/admin/getAnswers/{qzId}", String[].class, params);
+		String[] answers=restTemplate.getForObject("http://localhost:8081/admin/getAnswers/{qzId}", String[].class, params);
 		int i=0,score=0;
 		for(String a:answers) {
 			response[i] = response[i].replace("[", "").replace("]", "");
@@ -95,13 +95,13 @@ public class UserService {
 		userQuizScoreRepo.save(userQuizScore);
 	}
 	
-	public Map<Integer, Integer> checkPositions() {
-		List<UserQuizScore> scoreList=userQuizScoreRepo.findAll();
-		Map<Integer,Integer> scoreboard= new HashMap<Integer,Integer>();
+	public Map<String, Integer> checkPositions(long qzId) {
+		List<UserQuizScore> scoreList=userQuizScoreRepo.findByQzId(qzId);
+		Map<String,Integer> scoreboard= new HashMap<String,Integer>();
 		for(UserQuizScore u:scoreList) {
-			scoreboard.put((int) u.getResultId(),u.getScore());
+			scoreboard.put(u.getUserName(),u.getScore());
 		}
-		Map<Integer, Integer> sorted =scoreboard
+		Map<String, Integer> sorted =scoreboard
 		        .entrySet()
 		        .stream()
 		        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))

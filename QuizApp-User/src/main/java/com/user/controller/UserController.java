@@ -29,12 +29,14 @@ public class UserController {
 	
 	@PostMapping("/signup")
 	public String signup(UserDetails user) {
-		if(user==null)
+		if(!user.equals(null))
 		{
-			return "Enter Details";
+			userService.addUser(user);	
+			return "Registered Successfully";
+			
 		}
-		userService.addUser(user);	
-		return "Registered Successfully";
+		else
+		return "Enter Details";
 	}
 	
 	@PostMapping("/signin")
@@ -58,9 +60,9 @@ public class UserController {
 	public LiveQuiz submitQuiz(@RequestParam long qzId,@RequestParam String[] response) {
 		return userService.submitQuiz(qzId,response);
 	}
-	@GetMapping("/checkPosition")
-	public Map<Integer, Integer> checkPosition() {
-		return userService.checkPositions();
+	@GetMapping("/{qzId}/checkPosition")
+	public Map<String, Integer> checkPosition(@PathVariable long qzId) {
+		return userService.checkPositions(qzId);
 	}
 
 }

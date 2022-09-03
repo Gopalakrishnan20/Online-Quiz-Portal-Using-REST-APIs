@@ -52,6 +52,10 @@ public class AdminController {
 	public List<Quizes> showQuizes() {
 		return adminServices.showQuizes();		
 	}
+	@GetMapping("/stats")
+	public void generateStats() {
+		
+	}
 	
 
 }
