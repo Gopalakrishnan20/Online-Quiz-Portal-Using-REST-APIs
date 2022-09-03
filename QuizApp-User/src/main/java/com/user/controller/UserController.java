@@ -64,5 +64,9 @@ public class UserController {
 	public Map<String, Integer> checkPosition(@PathVariable long qzId) {
 		return userService.checkPositions(qzId);
 	}
+	@GetMapping("/userCount")
+	public int userCount() {
+		return userService.userCount();
+	}
 
 }

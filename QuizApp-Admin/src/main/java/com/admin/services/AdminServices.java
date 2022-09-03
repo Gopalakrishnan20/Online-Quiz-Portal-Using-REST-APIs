@@ -6,10 +6,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.admin.model.LiveQuiz;
 import com.admin.model.QnA;
 import com.admin.model.Quizes;
+import com.admin.model.Stats;
 import com.admin.repository.QuestionRepository;
 import com.admin.repository.QuizesRepository;
 
@@ -21,6 +23,8 @@ public class AdminServices {
 	@Autowired
 	QuestionRepository questionRepository;
 	
+	@Autowired
+	RestTemplate restTemplate;
 	
 	LiveQuiz quiz=new LiveQuiz();
 	
@@ -96,6 +100,13 @@ public class AdminServices {
 	public List<Quizes> showQuizes() {
 		List<Quizes> q=quizesRepository.findAllByPublished(true);
 		return q;
+	}
+	public Stats generateStats() {
+		Stats stat=new Stats();
+		stat.setQuizCount(quizesRepository.findAllByPublished(true).size());
+		stat.setQuestionsCount(questionRepository.findAll().size());
+		stat.setUserCount(restTemplate.getForObject("http://localhost:8082/user/userCount", Integer.class));
+		return stat;
 	}
 
 }

@@ -15,6 +15,7 @@ import com.admin.model.LiveQuiz;
 import com.admin.model.QnA;
 import com.admin.model.QnArray;
 import com.admin.model.Quizes;
+import com.admin.model.Stats;
 import com.admin.services.AdminServices;
 
 @RestController
@@ -53,7 +54,8 @@ public class AdminController {
 		return adminServices.showQuizes();		
 	}
 	@GetMapping("/stats")
-	public void generateStats() {
+	public Stats generateStats() {
+		return adminServices.generateStats();
 		
 	}
 	

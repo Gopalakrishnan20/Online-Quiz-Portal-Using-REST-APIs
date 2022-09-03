@@ -111,6 +111,8 @@ public class UserService {
 		return sorted;
 		}
 
-	
+	public int userCount() {
+		return userDetailsRepo.findAll().size();
+	}
 	
 }
